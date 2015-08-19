@@ -76,7 +76,7 @@ require File.expand_path('path_to_user.rb', __FILE__)
 
 # Demo Rails Application
 
-Here's a demo rails app you can clone and try it out: https://github.com/treeder/delayed_job_with_iron_mq
+Here's a demo rails app you can clone and try it out: https://github.com/treeder/delayed_job_ironmq
 
 # Using with Heroku
 
