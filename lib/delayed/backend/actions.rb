@@ -29,50 +29,6 @@ module Delayed
         #  Delayed::Worker.queue_name
         #end
 
-        def find_available(worker_name, limit = 5, max_run_time = Worker.max_run_time)
-          Delayed::IronMqBackend.available_priorities.each do |priority|
-            Delayed::IronMqBackend.all_queues.each do |queue_item|
-              message = nil
-              queue = queue_name(queue_item, priority)
-              begin
-                message = ironmq.queue(queue).get
-              rescue StandardError => e
-                if e.is_a?(Rest::HttpError) && e.code == 404
-                  # suppress Not Found errors
-                else
-                  Delayed::IronMqBackend.logger.warn(e.message)
-                end
-              end
-              return [Delayed::Backend::Ironmq::Job.new(message)] if message
-            end
-          end
-          []
-        end
-
-        def delete_all
-          Delayed::IronMqBackend.available_priorities.each do |priority|
-            loop do
-              msgs = nil
-              Delayed::IronMqBackend.queues.each do |queue_item|
-                queue = queue_name(queue_item, priority)
-                begin
-                  msgs = ironmq.queue(queue).get(:n => 100)
-                rescue StandardError => e
-                  if e.is_a?(Rest::HttpError) && e.code == 404
-                    # suppress Not Found errors
-                  else
-                    Delayed::IronMqBackend.logger.warn(e.message)
-                  end
-                end
-
-                break if msgs.blank?
-                ironmq.queue(queue).delete_reserved_messages(msgs)
-              end
-
-            end
-          end
-        end
-
         # No need to check locks
         def clear_locks!(*args)
           true
