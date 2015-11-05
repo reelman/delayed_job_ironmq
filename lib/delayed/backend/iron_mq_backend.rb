@@ -24,8 +24,10 @@ module Delayed
         self.logger.level ||= Logger::INFO
       end
 
-      def all_queues
-        @queues.length > 0 ? @queues : [@default_queue]
+      def all_queues(worker)
+        worker_queues = worker.queues
+        combined_queues = worker_queues + @queues
+        combined_queues.length > 0 ? combined_queues : [@default_queue]
       end
     end
   end
