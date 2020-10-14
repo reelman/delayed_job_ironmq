@@ -17,7 +17,7 @@ If you want to set the Host, Post, and Protocol specifically, simply include tho
 ```json
 {
     "project_id": "PROJECT ID HERE",
-    "token": "YOUR TOKEN HERE"
+    "token": "YOUR TOKEN HERE",
     "port": 443,
     "protocol": "https",
     "host":"mq-v3-aws-us-east-1.iron.io"
